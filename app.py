@@ -11,17 +11,17 @@ def connect():
 
 def create_user(conn, name, email):
     row = conn.execute(
-        "INSERT INTO users (name, email) VALUES (%s, %s) RETURNING id", (name, email)
+        "INSERT INTO users (full_name, email) VALUES (%s, %s) RETURNING id", (name, email)
     ).fetchone()
     return row[0]
 
 
 def get_user(conn, user_id):
-    return conn.execute("SELECT id, name, email FROM users WHERE id = %s", (user_id,)).fetchone()
+    return conn.execute("SELECT id, full_name, email FROM users WHERE id = %s", (user_id,)).fetchone()
 
 
 def rename_user(conn, user_id, name):
-    conn.execute("UPDATE users SET name = %s WHERE id = %s", (name, user_id))
+    conn.execute("UPDATE users SET full_name = %s WHERE id = %s", (name, user_id))
 
 
 def place_order(conn, user_id, total_cents):
@@ -33,7 +33,7 @@ def place_order(conn, user_id, total_cents):
 
 def order_history(conn, user_id):
     return conn.execute(
-        "SELECT o.id, o.total_cents, u.name FROM orders o JOIN users u ON u.id = o.user_id "
+        "SELECT o.id, o.total_cents, u.full_name FROM orders o JOIN users u ON u.id = o.user_id "
         "WHERE o.user_id = %s ORDER BY o.created_at",
         (user_id,),
     ).fetchall()

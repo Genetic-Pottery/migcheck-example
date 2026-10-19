@@ -37,3 +37,7 @@ def order_history(conn, user_id):
         "WHERE o.user_id = %s ORDER BY o.created_at",
         (user_id,),
     ).fetchall()
+
+
+def set_display_name(conn, user_id, display_name):
+    conn.execute("UPDATE users SET display_name = %s WHERE id = %s", (display_name, user_id))

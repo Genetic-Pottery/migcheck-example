@@ -9,9 +9,10 @@ def connect():
     return psycopg.connect(os.environ["DATABASE_URL"])
 
 
-def create_user(conn, name, email):
+def create_user(conn, name, email, signup_source="web"):
     row = conn.execute(
-        "INSERT INTO users (name, email) VALUES (%s, %s) RETURNING id", (name, email)
+        "INSERT INTO users (name, email, signup_source) VALUES (%s, %s, %s) RETURNING id",
+        (name, email, signup_source),
     ).fetchone()
     return row[0]
 
